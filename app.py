@@ -1,5 +1,5 @@
 import redis
-import sys
+import random
 
 #consts 
 REDIS_HOST = 'kyle-test.centralus.redisenterprise.cache.azure.net'
@@ -16,6 +16,8 @@ SUPPLY_MAX = 10000
 DEMAND_MAX = 10000
 SAFETYSTOCK_MAX = 1000
 
+NUM_ITEMS = 10000
+
 def main():
     # arg0 = sys.argv[0]
     # arg1 = sys.argv[1]
@@ -24,8 +26,8 @@ def main():
 
     r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASS)
 
-    for x in range(3):
-        write_item(r, x)
+    for x in range(NUM_ITEMS):
+        write_item_hash(r, x)
 
     print("main complete")
 
@@ -40,21 +42,31 @@ def main():
 #   7. supply --> NUMBER (14,2) - String/Number  
 #   8. demand --> NUMBER (14,2) - String/Number  
 #   9. safetystock --> NUMBER (14,2) - String/Number 
-def write_item(r: redis.Redis, index: int):
-    productid = '12345' + str(index)
-    locationid = '12345' + str(index)
+def write_item_hash(r: redis.Redis, index: int):
+    # generate not-so-random data
+    locationtype = LOCATION_TYPES[index % len(LOCATION_TYPES)]
+    fulfillmenttype = FULFILLMENT_TYPES[index % len(FULFILLMENT_TYPES)]
+    segment = SEGMENTS[index % len(SEGMENTS)]
+
+    productid = random.randint(PRODUCTID_MAX/2, PRODUCTID_MAX)
+    locationid = random.randint(1, LOCATIONID_MAX)
+    atp = random.randint(0, ATP_MAX)
+    supply = random.randint(0, SUPPLY_MAX)
+    demand = random.randint(0, DEMAND_MAX)
+    safetystock = random.randint(0, SAFETYSTOCK_MAX)
+
     inventory_item = {
         'productid': productid,
         'locationid': locationid,
-        'locationtype': '123456',
-        'fulfillmenttype': '123456',
-        'segment': '123456',
-        'atp': '123456',
-        'supply': '123456',
-        'demand': '123456',
-        'safetystock': '123456',
+        'locationtype': locationtype,
+        'fulfillmenttype': fulfillmenttype,
+        'segment': segment,
+        'atp': atp,
+        'supply': supply,
+        'demand': demand,
+        'safetystock': safetystock
     }
-    r.hset(name=productid+':'+locationid, mapping=inventory_item)
+    r.hset(name=str(productid)+':'+str(locationid), mapping=inventory_item)
     print(index)
 
 
