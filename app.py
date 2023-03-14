@@ -16,7 +16,7 @@ SUPPLY_MAX = 10000
 DEMAND_MAX = 10000
 SAFETYSTOCK_MAX = 1000
 
-NUM_ITEMS = 10000
+NUM_ITEMS = 1000000
 
 def main():
     # arg0 = sys.argv[0]
