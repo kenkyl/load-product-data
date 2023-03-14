@@ -2,9 +2,9 @@ import redis
 import random
 
 #consts 
-REDIS_HOST = 'kyle-test.centralus.redisenterprise.cache.azure.net'
-REDIS_PORT = 10000
-REDIS_PASS = 'tEVmj44udQPFAoLM3oElKR5TuFVacUSuna7RaCYqRV4=' 
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_PASS = 'password' 
 
 PRODUCTID_MAX = 10000000
 LOCATIONID_MAX = 5000
